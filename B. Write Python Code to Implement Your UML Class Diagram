@@ -1,0 +1,119 @@
+# Hotel Management System
+
+class Room:
+    """Represents a hotel room."""
+    def __init__(self, room_number, room_type, amenities, price_per_night):
+        self.__room_number = room_number
+        self.__type = room_type
+        self.__amenities = amenities  # List of strings
+        self.__price_per_night = price_per_night
+        self.__is_available = True
+
+    def check_availability(self):
+        return self.__is_available
+
+    def set_availability(self, status):
+        self.__is_available = status
+
+    def __str__(self):
+        return f"Room {self.__room_number} ({self.__type}) - AED {self.__price_per_night}/night"
+
+
+class Guest:
+    """Represents a hotel guest."""
+    def __init__(self, name, contact_info):
+        self.__name = name
+        self.__contact_info = contact_info
+        self.__loyalty_points = 0
+        self.__bookings = []
+
+    def create_booking(self, booking):
+        self.__bookings.append(booking)
+
+    def view_history(self):
+        return self.__bookings
+
+    def __str__(self):
+        return f"Guest: {self.__name} - Contact: {self.__contact_info}"
+
+
+class Invoice:
+    """Represents a booking invoice."""
+    def __init__(self, invoice_id, total_amount, payment_method, additional_charges=0, discount=0):
+        self.__invoice_id = invoice_id
+        self.__total_amount = total_amount
+        self.__payment_method = payment_method
+        self.__additional_charges = additional_charges
+        self.__discount = discount
+
+    def generate_invoice(self):
+        final_amount = self.__total_amount + self.__additional_charges - self.__discount
+        return f"Invoice {self.__invoice_id}: Total = AED {final_amount} paid by {self.__payment_method}"
+
+    def __str__(self):
+        return self.generate_invoice()
+
+
+class Booking:
+    """Represents a room booking."""
+    def __init__(self, booking_id, check_in, check_out, room, invoice):
+        self.__booking_id = booking_id
+        self.__check_in = check_in
+        self.__check_out = check_out
+        self.__room = room
+        self.__invoice = invoice
+
+    def confirm_booking(self):
+        self.__room.set_availability(False)
+        return f"Booking {self.__booking_id} confirmed for Room {self.__room._Room__room_number}"
+
+    def __str__(self):
+        return f"Booking ID: {self.__booking_id} | Room: {self.__room} | Invoice: {self.__invoice}"
+
+
+class GuestRequest:
+    """Represents a request made by the guest (like housekeeping or food)."""
+    def __init__(self, request_id, request_type, guest):
+        self.__request_id = request_id
+        self.__request_type = request_type
+        self.__status = "Pending"
+        self.__guest = guest
+
+    def submit_request(self):
+        return f"Request {self.__request_id} by {self.__guest._Guest__name}: {self.__request_type} - {self.__status}"
+
+    def __str__(self):
+        return self.submit_request()
+
+
+class Feedback:
+    """Stores feedback given by a guest."""
+    def __init__(self, feedback_id, rating, comments, guest):
+        self.__feedback_id = feedback_id
+        self.__rating = rating
+        self.__comments = comments
+        self.__guest = guest
+
+    def submit_feedback(self):
+        return f"Feedback {self.__feedback_id} from {self.__guest._Guest__name}: Rated {self.__rating}/5 - {self.__comments}"
+
+    def __str__(self):
+        return self.submit_feedback()
+
+
+class Hotel:
+    """Represents the hotel that contains rooms and guests."""
+    def __init__(self, name, address):
+        self.__name = name
+        self.__address = address
+        self.__rooms = []
+        self.__guests = []
+
+    def add_room(self, room):
+        self.__rooms.append(room)
+
+    def register_guest(self, guest):
+        self.__guests.append(guest)
+
+    def __str__(self):
+        return f"Hotel: {self.__name} | Address: {self.__address}"
