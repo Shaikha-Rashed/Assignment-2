@@ -1,0 +1,23 @@
+# Example usage
+room1 = Room(101, "Single", ["WiFi", "TV"], 300)
+guest1 = Guest("Shaikha", "shaikha@email.com")
+invoice1 = Invoice(1, 900, "Credit Card", additional_charges=50, discount=100)
+booking1 = Booking(1, "2025-04-01", "2025-04-03", room1, invoice1)
+
+guest1.create_booking(booking1)
+room1.set_availability(False)
+
+hotel = Hotel("Royal Stay", "Abu Dhabi")
+hotel.add_room(room1)
+hotel.register_guest(guest1)
+
+request = GuestRequest(1, "Housekeeping", guest1)
+feedback = Feedback(1, 5, "Amazing service!", guest1)
+
+print(hotel)
+print(room1)
+print(guest1)
+print(booking1.confirm_booking())
+print(booking1)
+print(request)
+print(feedback)
