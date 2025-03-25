@@ -1,0 +1,104 @@
+# Part C - Test Cases for Royal Stay Hotel Management System
+
+from datetime import datetime
+
+# Include your class definitions here (Room, Guest, Booking, Invoice, etc.)
+# Make sure to copy the class code before this test code if you're using it in a new file.
+
+class TestHotelManagementSystem:
+   """Test suite for Royal Stay Hotel Management System"""
+
+   def __init__(self):
+       # Create sample rooms
+       self.room1 = Room(101, "Single", ["WiFi", "TV"], 300)
+       self.room2 = Room(102, "Double", ["WiFi", "TV", "Mini-bar"], 500)
+
+       # Create sample guests
+       self.guest1 = Guest("Shaikha", "shaikha@email.com")
+       self.guest2 = Guest("Ahmed", "ahmed@email.com")
+
+       # Hotel setup
+       self.hotel = Hotel("Royal Stay", "Abu Dhabi")
+       self.hotel.add_room(self.room1)
+       self.hotel.add_room(self.room2)
+       self.hotel.register_guest(self.guest1)
+       self.hotel.register_guest(self.guest2)
+
+       # Booking dates
+       self.check_in = "2025-04-01"
+       self.check_out = "2025-04-03"
+
+   def test_guest_account_creation(self):
+       print("\nTEST: Guest Account Creation")
+       print(self.guest1)
+       print(self.guest2)
+
+   def test_search_available_rooms(self):
+       print("\nTEST: Searching for Available Rooms")
+       available_rooms = [room for room in [self.room1, self.room2] if room.check_availability()]
+       for room in available_rooms:
+           print("Available:", room)
+
+   def test_make_reservation(self):
+       print("\nTEST: Making Room Reservation")
+       invoice1 = Invoice(1, 600, "Credit Card", 50, 100)
+       booking1 = Booking(1, self.check_in, self.check_out, self.room1, invoice1)
+       self.guest1.create_booking(booking1)
+       booking1.confirm_booking()
+       print(booking1)
+
+       invoice2 = Invoice(2, 1000, "Mobile Wallet", 30, 50)
+       booking2 = Booking(2, self.check_in, self.check_out, self.room2, invoice2)
+       self.guest2.create_booking(booking2)
+       booking2.confirm_booking()
+       print(booking2)
+
+   def test_booking_confirmation_notification(self):
+       print("\nTEST: Booking Confirmation Notification")
+       print("Notification: Booking confirmed for", self.guest1._Guest__name)
+       print("Notification: Booking confirmed for", self.guest2._Guest__name)
+
+   def test_invoice_generation(self):
+       print("\nTEST: Invoice Generation")
+       for booking in self.guest1.view_history():
+           print(booking._Booking__invoice.generate_invoice())
+       for booking in self.guest2.view_history():
+           print(booking._Booking__invoice.generate_invoice())
+
+   def test_payment_processing(self):
+       print("\nTEST: Payment Processing Methods")
+       for booking in self.guest1.view_history() + self.guest2.view_history():
+           print(f"Payment Method for Booking {booking._Booking__booking_id}: {booking._Booking__invoice._Invoice__payment_method}")
+
+   def test_view_reservation_history(self):
+       print("\nTEST: Reservation History")
+       print(self.guest1._Guest__name, "History:")
+       for b in self.guest1.view_history():
+           print(b)
+       print(self.guest2._Guest__name, "History:")
+       for b in self.guest2.view_history():
+           print(b)
+
+   def test_cancel_reservation(self):
+       print("\nTEST: Cancel Reservation")
+       # Cancel bookings by making rooms available again
+       for booking in self.guest1.view_history():
+           booking._Booking__room.set_availability(True)
+           print(f"Booking {booking._Booking__booking_id} cancelled. Room {booking._Booking__room._Room__room_number} is now available.")
+
+       for booking in self.guest2.view_history():
+           booking._Booking__room.set_availability(True)
+           print(f"Booking {booking._Booking__booking_id} cancelled. Room {booking._Booking__room._Room__room_number} is now available.")
+
+
+# Running the test cases
+if __name__ == "__main__":
+   test_suite = TestHotelManagementSystem()
+   test_suite.test_guest_account_creation()
+   test_suite.test_search_available_rooms()
+   test_suite.test_make_reservation()
+   test_suite.test_booking_confirmation_notification()
+   test_suite.test_invoice_generation()
+   test_suite.test_payment_processing()
+   test_suite.test_view_reservation_history()
+   test_suite.test_cancel_reservation()
